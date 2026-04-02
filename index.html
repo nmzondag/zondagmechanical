@@ -16,9 +16,7 @@
             background-color: #0a0a0a;
             overflow: hidden;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100vw;
         }
         
         model-viewer {
@@ -27,79 +25,83 @@
             background-color: #0a0a0a;
         }
         
-        /* Minimal loading indicator (visual only) */
+        /* Minimal loading spinner (visual only) */
         .loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid #ffffff;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.15);
+            border-top: 5px solid #ffffff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            z-index: 10;
+            z-index: 100;
         }
         
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div style="position: relative; width: 100%; height: 100%;">
-        <!-- Loading spinner-->
-        <div class="loading" id="loader"></div> 
+        <!-- Loading spinner -->
+        <div class="loading" id="loader"></div>
         
-        <!-- Interactive SolidWorks model viewer. Replace src- "SOLIDWORKS MODEL.glb". Add glb file to github repo. Use solidworks visualize, export as extended reality, GLB -->
-          <div class="model-viewer-container">
-              <model-viewer 
-                src="TWR-16 FRONT WING MASTER.glb" 
-                alt="TWR-16 Front Wing – Parasolid Model"
-                camera-controls="true"
-                auto-rotate="true"
-                auto-rotate-delay="1200"
-                rotation-per-second="20deg"
-                shadow-intensity="1"
-                exposure="0.85"
-                environment-image="neutral"
-                ar="true"
-                ar-modes="webxr scene-viewer quick-look">
-              </model-viewer>
-            </div>
-            
-            <p class="viewer-caption">
-              <strong>Controls:</strong> Left-click + drag to rotate • Scroll / pinch to zoom • Right-click + drag to pan
-            </p>
+        <!-- SolidWorks GLB Model Viewer -->
+        <model-viewer 
+            id="modelViewer"
+            src="TWR-16 FRONT WING MASTER.glb"
+            alt=""
+            camera-controls
+            auto-rotate
+            auto-rotate-delay="2000"
+            rotation-per-second="20deg"
+            shadow-intensity="1.2"
+            exposure="0.9"
+            environment-intensity="0.8"
+            loading="eager"
+            ar
+            ar-modes="webxr scene-viewer quick-look">
+        </model-viewer>
+    </div>
 
     <script>
         const modelViewer = document.getElementById('modelViewer');
         const loader = document.getElementById('loader');
         
-        // Show loader until model is ready
+        // Show spinner until model is fully loaded
         loader.style.display = 'block';
         
         modelViewer.addEventListener('load', () => {
             loader.style.display = 'none';
+            console.log('Model loaded successfully');
         });
         
-        // Optional: Double-click for fullscreen
+        // Fallback: hide spinner after 15 seconds in case of error
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                loader.style.display = 'none';
+            }
+        }, 15000);
+        
+        // Double-click anywhere for fullscreen
         document.addEventListener('dblclick', () => {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
+                document.documentElement.requestFullscreen().catch(() => {});
             } else {
                 document.exitFullscreen();
             }
         });
         
-        // Press F for fullscreen
+        // Press F key for fullscreen
         document.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'f') {
                 e.preventDefault();
                 if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
+                    document.documentElement.requestFullscreen().catch(() => {});
                 } else {
                     document.exitFullscreen();
                 }
