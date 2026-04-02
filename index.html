@@ -6,11 +6,7 @@
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/model-viewer/v3.5.0/model-viewer.min.js" type="module"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background-color: #0a0a0a;
@@ -25,7 +21,6 @@
             background-color: #0a0a0a;
         }
         
-        /* Minimal loading spinner (visual only) */
         .loading {
             position: absolute;
             top: 50%;
@@ -47,21 +42,19 @@
 </head>
 <body>
     <div style="position: relative; width: 100%; height: 100%;">
-        <!-- Loading spinner -->
         <div class="loading" id="loader"></div>
         
-        <!-- SolidWorks GLB Model Viewer -->
         <model-viewer 
             id="modelViewer"
-            src="TWR-16 FRONT WING MASTER.glb"
+            src="TWR-16-Front-Wing-Master.glb"   <!-- ← Update this to your new filename -->
             alt=""
             camera-controls
             auto-rotate
-            auto-rotate-delay="2000"
-            rotation-per-second="20deg"
-            shadow-intensity="1.2"
+            auto-rotate-delay="1500"
+            rotation-per-second="15deg"
+            shadow-intensity="1"
             exposure="0.9"
-            environment-intensity="0.8"
+            environment-intensity="0.85"
             loading="eager"
             ar
             ar-modes="webxr scene-viewer quick-look">
@@ -72,39 +65,29 @@
         const modelViewer = document.getElementById('modelViewer');
         const loader = document.getElementById('loader');
         
-        // Show spinner until model is fully loaded
         loader.style.display = 'block';
         
         modelViewer.addEventListener('load', () => {
             loader.style.display = 'none';
-            console.log('Model loaded successfully');
+            console.log('✅ Model loaded successfully');
         });
         
-        // Fallback: hide spinner after 15 seconds in case of error
+        // Safety timeout
         setTimeout(() => {
-            if (loader.style.display !== 'none') {
-                loader.style.display = 'none';
-            }
-        }, 15000);
-        
-        // Double-click anywhere for fullscreen
+            if (loader.style.display !== 'none') loader.style.display = 'none';
+        }, 20000);
+
+        // Fullscreen shortcuts
         document.addEventListener('dblclick', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         });
         
-        // Press F key for fullscreen
         document.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'f') {
                 e.preventDefault();
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(() => {});
-                } else {
-                    document.exitFullscreen();
-                }
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+                else document.exitFullscreen();
             }
         });
     </script>
