@@ -54,19 +54,25 @@
         <div class="loading" id="loader"></div> -->
         
         <!-- Interactive SolidWorks model viewer. Replace src- "SOLIDWORKS MODEL.glb". Add glb file to github repo. Use solidworks visualize, export as extended reality, GLB -->
-        <model-viewer 
-            id="modelViewer"
-            src="TWR-16 FRONT WING MASTER.glb" 
-            alt=""
-            auto-rotate
-            camera-controls
-            shadow-intensity="1"
-            exposure="1"
-            environment-intensity="1"
-            style="width: 100%; height: 100%;"
-            loading="eager">
-        </model-viewer>
-    </div>
+          <div class="model-viewer-container">
+              <model-viewer 
+                src="TWR-16 FRONT WING MASTER.glb" 
+                alt="TWR-16 Front Wing – Parasolid Model"
+                camera-controls="true"
+                auto-rotate="true"
+                auto-rotate-delay="1200"
+                rotation-per-second="20deg"
+                shadow-intensity="1"
+                exposure="0.85"
+                environment-image="neutral"
+                ar="true"
+                ar-modes="webxr scene-viewer quick-look">
+              </model-viewer>
+            </div>
+            
+            <p class="viewer-caption">
+              <strong>Controls:</strong> Left-click + drag to rotate • Scroll / pinch to zoom • Right-click + drag to pan
+            </p>
 
     <script>
         const modelViewer = document.getElementById('modelViewer');
